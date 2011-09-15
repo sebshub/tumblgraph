@@ -1,0 +1,2 @@
+module TumblrmapHelper
+end
