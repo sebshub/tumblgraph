@@ -5,6 +5,7 @@ Tumblgraph::Application.routes.draw do
 
   match '/register' => 'tumblrmap#register'
   match '/confirm' => 'tumblrmap#confirm'
+  match '/map' => 'tumblrmap#map'
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action

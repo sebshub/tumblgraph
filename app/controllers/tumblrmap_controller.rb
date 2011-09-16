@@ -4,6 +4,14 @@ class TumblrmapController < ApplicationController
     def index
     end
 
+    def map
+        nodes = User.get_all_primaries
+        links = User.get_all_links nodes
+        @map_data = {:nodes => nodes, :links => links}
+        puts @map_data
+        render :json => @map_data
+    end
+
     def register
         request_token = tumblrclient.request_token(:oauth_callback => 'http://localhost/confirm')
         session[:request_token] = request_token
@@ -58,14 +66,12 @@ class TumblrmapController < ApplicationController
             end
         }
         
-
+        redirect_to "/"
     end
 
     private
     def tumblrclient
         client = TumblrOAuth::Client.new({
-            :consumer_key => '', 
-            :consumer_secret => ''
         })
         client
     end
