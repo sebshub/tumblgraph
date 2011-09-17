@@ -5,10 +5,15 @@ class TumblrmapController < ApplicationController
     end
 
     def map
-        nodes = User.get_all_primaries
-        links = User.get_all_links nodes
-        @map_data = {:nodes => nodes, :links => links}
-        puts @map_data
+        users = User.all
+        @map_data = {:nodes => {}, :links => {}}
+        users.each{ |user|
+            @map_data[:nodes][user.primary] = {}
+            @map_data[:links][user.primary] = {}
+            user.following.each{ |follower|
+                @map_data[:links][user.primary][follower] = { :weight => 1 }
+            }
+        }
         render :json => @map_data
     end
 
@@ -72,6 +77,8 @@ class TumblrmapController < ApplicationController
     private
     def tumblrclient
         client = TumblrOAuth::Client.new({
+           :consumer_key => ENV["TUMBLR_CONSUMER_KEY"],
+           :consumer_secret => ENV["TUMBLR_SECRET_KEY"]
         })
         client
     end
